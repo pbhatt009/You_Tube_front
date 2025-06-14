@@ -23,5 +23,5 @@ const videomanager=createSlice({
         }
     }
 })
-export const{addallvideos,addvideo,removeallvideos,removevideo,updatevideo}=postmanager.actions;
+export const{addallvideos,addvideo,removeallvideos,removevideo,updatevideo}=videomanager.actions;
 export default videomanager.reducer;

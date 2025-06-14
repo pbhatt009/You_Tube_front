@@ -3,25 +3,34 @@ import './App.css'
 import axios from 'axios'
 import { Header,Footer } from './utils/index.js';
 import { Outlet } from 'react-router-dom';
+import { login } from './Requsets/User.requests.js';
 
 function App() {
   const [message,setmessage]=useState("");
+  const[data,setdata]=useState({})
     useEffect(()=>{
-    axios.get("/api")
-    .then(res=>setmessage(res.data))
-    .catch(err=>console.log(err,typeof(err)));
+      setdata(login({
+    "username":"check3",
+    "password":"PBhatt@009"
+}))
+setmessage("hi")
     },[])
-return (
-  <div className='min-h-screen flex flex-wrap content between bg-gray-400'>
-<div className='w-full'>
-<Header/>
-<main>
-<Outlet/>
-</main>
-<Footer/>
-</div>
+    useEffect(()=>{
+console.log(data);
+    },[data])
 
-   </div>
+return (
+//   <div className='min-h-screen flex flex-wrap content between bg-gray-400'>
+// <div className='w-full'>
+// <Header/>
+// <main>
+// <Outlet/>
+// </main>
+// <Footer/>
+// </div>
+  
+//    </div>
+   <h1 className='color-black'>{message}</h1>
   )
 }
 
