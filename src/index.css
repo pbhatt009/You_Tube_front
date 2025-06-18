@@ -1,1 +1,13 @@
 @import "tailwindcss";
+/* Disable Chrome/Edge built-in password visibility toggle */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-password-reveal {
+  display: none;
+  pointer-events: none;
+  opacity: 0;
+}
