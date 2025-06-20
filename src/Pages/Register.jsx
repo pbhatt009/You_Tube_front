@@ -92,7 +92,7 @@ export default function RegisterForm() {
     }
    
     setRegisterDone(true);
-
+     
     const loginData = await loginreq({
     "username": fdata.get('username'),
     "password": fdata.get('password')

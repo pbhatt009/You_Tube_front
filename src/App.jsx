@@ -1,34 +1,47 @@
 import { use, useEffect, useState } from 'react'
 import './App.css'
-import axios from 'axios'
-import { Header,Footer,Sidebar} from './utils/index.js';
-import { Outlet,Navigate } from 'react-router-dom';
 
+import { Header,Footer,Sidebar,getcurrentUser} from './utils/index.js';
+import { Outlet,Navigate } from 'react-router-dom';
+import { login } from './Store/Auth_reducer.jsx';
 import { useDispatch,useSelector } from 'react-redux';
 function App() {
-  const [message,setmessage]=useState("");
-  const[auth,setauth]=useState(false);
-  const[data,setdata]=useState({})
-//     useEffect(()=>{
-//       setdata(login({
-//     "username":"check3",
-//     "password":"PBhatt@009"
-// }))
-// setmessage("hi")
-//     },[])
-//     useEffect(()=>{
-// console.log(data);
-//     },[data])
+   const dispatch=useDispatch()
+    const[auth,setauth]=useState(false);
+    const[loading,setLoading]=useState(true);
+    const isAuthenticated = useSelector((state) => state.auth.status);
+    useEffect( ()=>{ 
+      if(!isAuthenticated){
+      async function checkAuth(){
+    const currentuser=await getcurrentUser();
+    if(currentuser.data){
+      dispatch(login(currentuser.data.data))
+      console.log("current user",currentuser.data.data);
+      setauth(true);
+    }
+    setLoading(false);}
+    checkAuth();
+  }
+  else{
+ 
+    setauth(true);
+    setLoading(false);
+  }
 
-  const authStatus = useSelector((state) => state.auth.status);
-  const userData = useSelector((state) => state.auth.userdata);
 
- useEffect(()=>{
-    setauth(authStatus);
-    setdata(userData);
- },[authStatus, userData])
+},[])
 
- if(!auth){
+
+ if(loading) return <div className="flex items-center justify-center min-h-screen bg-gray-200">
+ <div className="flex flex-col items-center space-y-4">
+  
+    <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+
+ 
+    <p className="text-gray-700 text-lg font-medium">Loading...</p>
+  </div>
+</div>
+ else if(!auth){
   return (
     <Navigate to="/register" replace={true} />
   )

@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import { Provider } from 'react-redux'
@@ -6,10 +6,12 @@ import './index.css'
 import { useSelector,useDispatch } from 'react-redux'
 import App from './App.jsx'
 import store from "../src/Store/store.js"
-import { Header, Footer, Sidebar, LoginPage,RegisterPage } from './utils/index.js'
+import { Header, Footer, Sidebar, LoginPage,RegisterPage,getcurrentUser } from './utils/index.js'
+
 
 
 const router=createBrowserRouter(createRoutesFromElements(
+  
   <>
   {/* protected route */}
 <Route path='/' element={<App/>}>
