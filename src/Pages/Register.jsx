@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { EyeIcon,EyeSlashIcon } from '@heroicons/react/24/outline';
+import { register,loginreq } from '../utils/index.js'
+import { useDispatch,useSelector } from 'react-redux';
+import { login } from '../Store/Auth_reducer.jsx';
 export default function RegisterForm() {
-  const [formData, setFormData] = useState({
+     const Navigate = useNavigate();
+    const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     password: '',
@@ -31,40 +36,86 @@ export default function RegisterForm() {
           
 
   };
-
+  const[registerprocessing, setRegisterProcessing] = useState(false);
+  const[registerdone, setRegisterDone] = useState(false);
+  const dispatch = useDispatch();
   const handleSubmit =async (e) => {
 
     e.preventDefault();
+   setRegisterProcessing(true);
+    setRegisterDone(false);
     setErrors({});
     // console.log(formData);
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if(!emailRegex.test(formData.email)) {
       setErrors(prev => ({ ...prev, email: 'Invalid email format' }));
       console.log('Invalid email format');
+      setRegisterProcessing(false);
+
       return;
     }
     if (formData.password.length < 6) {
       setErrors(prev => ({ ...prev, password: 'Password must be at least 6 characters' }));     
       console.log('Password must be at least 6 characters');
+        setRegisterProcessing(false);
       return;
     }
      if(formData.avatar.type.split('/')[0]!='image'){
         setErrors(prev => ({ ...prev, avatar:'avatar should be an image'}));     
-       return;
+       setRegisterProcessing(false);
+        return;
     }
-       if(coverImage&&formData.coverImage.type.split('/')[0]!='image'){
+    console.log()
+       if(formData.coverImage&&formData.coverImage?.type.split('/')[0]!='image'){
         setErrors(prev => ({ ...prev,coverImage:'cover image should be an image'}));     
-       return;
+       setRegisterProcessing(false);
+        return;
     }
-
-
-
-
-    
-    
-     
+   const fdata=new FormData();
+    for (const key in formData) {
+      if (formData[key] !== null && formData[key] !== undefined) {
+        fdata.append(key, formData[key]);
+      }
     }
+    // console.log(fdata);
+    // console.log('Submitting form with data:', fdata);
+    // Handle the form submission logic here
+    // For example, you can send the data to your server using fetch or axios
+   const result=await register(fdata);
+    // console.log("data",result.data);
+    // console.log("error",result.error);
+    if(result.error){
+      setErrors(prev => ({ ...prev, general: result.error.message }));
+      console.log(result.error);
+        setRegisterProcessing(false);
+      return;
+    }
+   
+    setRegisterDone(true);
 
+    const loginData = await loginreq({
+    "username": fdata.get('username'),
+    "password": fdata.get('password')
+}) 
+// console.log(loginData);
+if(loginData.error){
+  setErrors(prev => ({ ...prev, general: loginData.error.message }));
+    console.log(loginData.error);
+    setRegisterProcessing(false);
+  
+  setRegisterDone(false);
+  return;
+
+}
+// console.log("loginData",loginData.data.data);
+ dispatch(login(loginData.data.data))
+    
+  setRegisterProcessing(false);
+  setRegisterDone(false);
+  Navigate('/', { replace: true });
+  return;
+  
+}
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 text-black">
@@ -150,12 +201,20 @@ export default function RegisterForm() {
           />
         </div>
          {errors.coverImage && <span className="text-red-500 text-sm relative -top-3">{errors.coverImage}</span>}
-        <p className='text-red-500 text-sm'>{errors.general}</p>
-        <p className='text-center text-sm my-2'>Already registered? Click here to <Link to="/login" className="text-indigo-600 hover:underline">login</Link>.</p>
-        <button type="submit" className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <div className='flex  justify-center items-center'><p className='text-red-500 text-sm'>{errors.general}</p></div>
+        <p className='text-center text-sm my-2'>Already registered? Click here to <Link to="/login" replace={true} className="text-indigo-600 hover:underline">login</Link>.</p>
+          {!registerprocessing?  <button type="submit" className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
           Register
-        </button>
+        </button>:
+           !registerdone?
+        <button type="button" className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" disabled>
+          Processing...
+        </button>:
+        <div className='flex flex-row items-center justify-center w-100'>
+        <span className="text-green-500 text-m ">Registered Successfully!Logging in</span>
+        </div>}
       </form>
     </div>
+
   );
 }

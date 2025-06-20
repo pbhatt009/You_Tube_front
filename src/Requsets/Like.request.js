@@ -6,7 +6,7 @@ const addliketoVideo = asynchandeler(async (videoId) => {
     params: { videoId },
     withCredentials: true,
   });
-  return result.data;
+  return result;
 });
 
 const addliketocomment = asynchandeler(async (commentId) => {
@@ -14,14 +14,14 @@ const addliketocomment = asynchandeler(async (commentId) => {
     params: {commentId },
     withCredentials: true,
   });
-  return result.data;
+  return result;
 });
 
 const unlike= asynchandeler(async (commentid) => {
   const result = await axios.delete(`/api/v1/like/unlike/${commentid}`, {
  withCredentials: true,
   });
-  return result.data;
+  return result;
 });
 
 export { addliketoVideo, addliketocomment, unlike };

@@ -5,7 +5,7 @@ const uploadVideo = asynchandeler(async (data) => {
    
       withCredentials: true,
     });
-    return result.data;
+    return result;
   })
 
   const getAllVideos = asynchandeler(async (data) => {
@@ -24,41 +24,41 @@ const uploadVideo = asynchandeler(async (data) => {
       },
       withCredentials: true,
     });
-    return result.data;
+    return result;
   })
 
 const getVideoById = asynchandeler(async (id) => {
       const result = await axios.get(`/api/v1/video/getVideo/${id}`, {
         withCredentials: true,
       });
-      return result.data;
+      return result;
     });
 
     const updateVideo = asynchandeler(async (id,data) => {
       const result = await axios.patch(`/api/v1/video/${id}/update`, data, {
         withCredentials: true,
       });
-      return result.data;
+      return result;
     });
  const deleteVideo = asynchandeler(async (id) => {
       const result = await axios.delete(`/api/v1/video/${id}/delete`, {
         withCredentials: true,
       });
-      return result.data;
+      return result;
     })
     
     const increseVideoViews = asynchandeler(async (id) => {
       const result = await axios.patch(`/api/v1/video/${id}/increseview`, {}, {
         withCredentials: true,
       });
-      return result.data;
+      return result;
     });
 
     const changestatus = asynchandeler(async (id) => {
       const result = await axios.patch(`/api/v1/video/${id}/changestatus`,{}, {
         withCredentials: true,
       });
-      return result.data;
+      return result;
     });
 
     export {
