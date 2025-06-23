@@ -9,55 +9,79 @@ import {
   UserIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
+import { useSelector,useDispatch } from 'react-redux';
+import { useState } from 'react';
+import RightSidebar from './RightSidebar';
 export default function Header() {
+  const[showsearch,setsearch]=useState(false);
+  const changesearch=(e)=>{
+     e.preventDefault();
+    setsearch(prev=>!prev)
+  }
+  const searchmini=(e)=>{
+    e.preventDefault();
+    changesearch(e)
+    searchhandel(e)
+
+  }
+  const searchhandel=(e)=>{
+    e.preventDefault();
+    if(!e.target.value.trim()) return;
+
+  }
+  const[showrightsidebar,setrightsidebar]=useState(false)
+  const rsbarfn=()=>{
+       setrightsidebar(prev=>!prev)
+  }
+  const dispatch = useDispatch();
+  const userdata = useSelector((state) => state.auth.userdata);
+  console.log("user",userdata.avatar);
     return(
-        <header className="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4 color-white text-amber-50">
-          <nav className="mx-auto flex max-w-7xl items-center py-2">
-            <div className="mr-4 w-12 shrink-0 sm:w-16">logo</div>
+        <header >
+          <nav className=" flex sticky hinset-x-0 top-0 z-50 w-[100vw] h-12 sm:h-20 border-b border-white bg-[#121212] px-4 color-white text-amber-50  items-center py-2">
+            <div hidden={showsearch} className="mr-4 w-12 shrink-0 sm:w-16">logo</div>
             <div className="relative mx-auto hidden w-full max-w-md overflow-hidden sm:block">
+              <form >
               <input
+              type='search'
                 className="w-full border bg-transparent py-1 pl-8 pr-3 placeholder-white outline-none sm:py-2"
                 placeholder="Search"
               />
+              </form>
               <span className="absolute left-2.5 top-1/2 inline-block -translate-y-1/2">
                 <MagnifyingGlassIcon className=" h-4 w-4" />
               </span>
+
             </div>
-            <button className="ml-auto sm:hidden">
+            <button onClick={rsbarfn} className=' hidden sm:block'>
+              <img src={userdata.avatar} alt="no proflile" className='h-16 w-16 rounded-full' />
+            </button>
+
+            {/* //small screem */}
+            <div className=" w-full gap-3 flex sm:hidden items-end justify-end">
+            
+            <form hidden={!showsearch} className='w-full' onSubmit={searchmini} >
+                <input
+              type='search'
+                className="w-full border bg-transparent py-1 pl-8 pr-3 placeholder-white outline-none sm:py-2"
+                placeholder="Search"
+              />
+              
+              </form>
+             <button hidden={showsearch} className="ml-auto" onClick={changesearch}>
               <MagnifyingGlassIcon className=" h-6 w-6" />
             </button>
-            <button className="group peer ml-4 flex w-6 shrink-0 flex-wrap gap-y-1.5 sm:hidden">
+                 
+            <button hidden={showsearch} onClick={rsbarfn} className="group peer ml-4 flex w-6 shrink-0 flex-wrap gap-y-1.5 sm:hidden">
               <span className="block h-[2px] w-full bg-white group-hover:bg-[#ae7aff]"></span>
               <span className="block h-[2px] w-2/3 bg-white group-hover:bg-[#ae7aff]"></span>
               <span className="block h-[2px] w-full bg-white group-hover:bg-[#ae7aff]"></span>
             </button>
-            <div className="fixed inset-y-0 right-0 flex w-full max-w-xs shrink-0 translate-x-full flex-col border-l border-white bg-[#121212] duration-200 hover:translate-x-0 peer-focus:translate-x-0 sm:static sm:ml-4 sm:w-auto sm:translate-x-0 sm:border-none">
-              <div className="relative flex w-full items-center justify-between border-b border-white px-4 py-2 sm:hidden">
-                <span className="inline-block w-12">logo</span>
-                <button className="inline-block w-8">
-                  <XCircleIcon />
-                </button>
-              </div>
-              <ul className="my-4 flex w-full flex-wrap gap-2 px-4 sm:hidden">
-              
-              </ul>
-  
-              <div className="mb-8 mt-auto px-4 sm:mb-0 sm:mt-0 sm:px-0">
-                <button className="flex w-full gap-4 text-left sm:items-center">
-                  <img
-                    src="https://images.pexels.com/photos/1115816/pexels-photo-1115816.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                    alt="React-Patterns"
-                    className="h-16 w-16 shrink-0 rounded-full sm:h-12 sm:w-12"
-                  />
-  
-                  <div className="w-full pt-2 sm:hidden">
-                    <h6 className="font-semibold">React Patterns</h6>
-                    <p className="text-sm text-gray-300">@reactpatterns</p>
-                  </div>
-                </button>
-              </div>
             </div>
           </nav>
+          <div >
+          <RightSidebar show={showrightsidebar} changeshow={rsbarfn}/>
+          </div>
         </header>
     )
 }

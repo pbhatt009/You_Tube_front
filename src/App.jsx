@@ -1,8 +1,9 @@
 import { use, useEffect, useState } from 'react'
 import './App.css'
 
-import { Header,Footer,Sidebar,getcurrentUser} from './utils/index.js';
+import { Header,Footer,Sidebar,getcurrentUser,updaterefreshtoken} from './utils/index.js';
 import { Outlet,Navigate } from 'react-router-dom';
+import RightSidebar from './components/RightSidebar.jsx';
 import { login } from './Store/Auth_reducer.jsx';
 import { useDispatch,useSelector } from 'react-redux';
 function App() {
@@ -16,9 +17,21 @@ function App() {
     const currentuser=await getcurrentUser();
     if(currentuser.data){
       dispatch(login(currentuser.data.data))
-      console.log("current user",currentuser.data.data);
+      // console.log("current user",currentuser.data.data);
       setauth(true);
     }
+    else{
+      const refreshtoken=await updaterefreshtoken();
+      if(refreshtoken.data){
+        dispatch(login(refreshtoken.data.data))
+        // console.log("refreshed user",refreshtoken.data.data);
+        setauth(true);
+      }
+      else{
+        setauth(false);
+       }
+      }
+
     setLoading(false);}
     checkAuth();
   }
@@ -43,15 +56,17 @@ function App() {
 </div>
  else if(!auth){
   return (
-    <Navigate to="/register" replace={true} />
+    <Navigate to="/login" replace={true} />
   )
  }
 
 else return (
-  <div className='min-h-screen flex flex-wrap content between bg-gray-400 gap-0'>
-<div className='w-full'>
+  
+<div className='w-full bg-gray-300 min-h-screen'>
+ 
 <Header className="sticky top-0 z-50" />
-<div className='flex flex-row relative top-20'>
+
+<div className='flex w-full flex-row relative top-20'>
 <Sidebar/>
 <main>
 <Outlet/>
@@ -61,7 +76,7 @@ else return (
 
 </div>
   
-   </div>
+   
  
   )
 }
