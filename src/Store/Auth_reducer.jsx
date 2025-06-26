@@ -16,6 +16,7 @@ const authslice=createSlice({
       },
       
       logout:(state)=>{
+     
         state.status=false
         state.userdata=null
       }

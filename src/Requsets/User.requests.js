@@ -17,7 +17,7 @@ const register = asynchandeler(async (data) => {
   
   })
 
-   const logout = asynchandeler(async () => {
+   const logoutreq = asynchandeler(async () => {
    const result=await axios.post("/api/v1/user/logout",{},{
      withCredentials: true,
    })
@@ -93,4 +93,4 @@ const getcurrentUser = asynchandeler(async () => {
 
    })
 
-  export { register, loginreq, logout, updaterefreshtoken, getcurrentUser, updateuser, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword};
+  export { register, loginreq, logoutreq, updaterefreshtoken, getcurrentUser, updateuser, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword};

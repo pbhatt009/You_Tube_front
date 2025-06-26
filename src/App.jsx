@@ -1,9 +1,9 @@
-import { use, useEffect, useState } from 'react'
+import { use, useCallback, useEffect, useState } from 'react'
 import './App.css'
 
 import { Header,Footer,Sidebar,getcurrentUser,updaterefreshtoken} from './utils/index.js';
 import { Outlet,Navigate } from 'react-router-dom';
-import RightSidebar from './components/RightSidebar.jsx';
+
 import { login } from './Store/Auth_reducer.jsx';
 import { useDispatch,useSelector } from 'react-redux';
 function App() {
@@ -11,6 +11,7 @@ function App() {
     const[auth,setauth]=useState(false);
     const[loading,setLoading]=useState(true);
     const isAuthenticated = useSelector((state) => state.auth.status);
+     if(!isAuthenticated&&auth) setauth(false)
     useEffect( ()=>{ 
       if(!isAuthenticated){
       async function checkAuth(){
@@ -42,7 +43,7 @@ function App() {
   }
 
 
-},[])
+},[isAuthenticated])
 
 
  if(loading) return <div className="flex items-center justify-center min-h-screen bg-gray-200">
@@ -62,14 +63,14 @@ function App() {
 
 else return (
   
-<div className='w-full bg-gray-300 min-h-screen'>
+<div className=' bg-gray-300 w-full h-screen'>
  
 <Header className="sticky top-0 z-50" />
 
-<div className='flex w-full flex-row relative top-20'>
+<div className='flex w-full flex-row h-[90vh] sm:h-[88vh] lg:h-[89vh]'>
 <Sidebar/>
-<main>
-<Outlet/>
+<main className=' w-full sm:w-[81vw] lg:w-[85vw] xl:w-[89vw] h-full'>
+<Outlet />
 </main>
 </div>
 <Footer/>

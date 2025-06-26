@@ -6,7 +6,7 @@ import './index.css'
 import { useSelector,useDispatch } from 'react-redux'
 import App from './App.jsx'
 import store from "../src/Store/store.js"
-import { Header, Footer, Sidebar, LoginPage,RegisterPage,getcurrentUser } from './utils/index.js'
+import { Header, Footer, Sidebar, LoginPage,RegisterPage,getcurrentUser,UploadVideopage } from './utils/index.js'
  
  
 
@@ -15,8 +15,9 @@ const router=createBrowserRouter(createRoutesFromElements(
   <>
   {/* protected route */}
 <Route path='/' element={<App/>}>
-
+<Route path='uploadVideo'element={<UploadVideopage/>}></Route>
 </Route>
+
 {/* public routes */}
 <Route path='/login'element={<LoginPage/>}></Route>
 <Route path='/register' element={<RegisterPage/>}></Route>

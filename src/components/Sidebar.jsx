@@ -13,21 +13,23 @@ const navItems = [
 
 const Sidebar = () => {
   return (
-    <div className="fixed top-7 left-0 w-40 lg:w-55 h-full bg-black text-white p-2 hidden sm:block">
+    <div className="left-0 w-[19vw] lg:w-[15vw] xl:w-[11vw] h-full bg-black text-white  hidden sm:block">
       
       <nav>
-        <div className='flex flex-col space-y-2 relative top-10'>
+        <div className='flex flex-col  relative'>
           {navItems.map((item) => (
-            <div key={item.name} className="mb-4 ">
-              <Link
-                to={item.to}
-                className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700"
-              >
-                {item.icon}
-                <span>{item.name}</span>
-              </Link>
-            </div>
-          ))}
+    
+  <div key={item.name} className=" h-17  w-full  border-b border-gray-400 flex justify-center ">
+    <Link
+      to={item.to}
+      className="flex items-center h-full w-full space-x-3 p-2 rounded-lg hover:bg-gray-700  justify-center"
+    >
+      {item.icon}
+      <span>{item.name}</span>
+    </Link>
+  </div>
+))
+        }
         </div>
       </nav>
     </div>

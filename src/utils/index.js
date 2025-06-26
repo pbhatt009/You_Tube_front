@@ -3,9 +3,16 @@ import Footer from "../components/Footer.jsx";
 import Sidebar from "../components/Sidebar.jsx";
 import LoginPage from "../Pages/Login.jsx";
 import RegisterPage from "../Pages/Register.jsx";
-import {register, loginreq, logout, updaterefreshtoken, getcurrentUser, updateuser, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword} from "../Requsets/User.requests.js"
+import UploadVideopage from "../Pages/Upload_video.jsx"
+import {register, loginreq, logoutreq, updaterefreshtoken, getcurrentUser, updateuser, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword} from "../Requsets/User.requests.js"
 
-
+import {  uploadVideo,
+      getAllVideos,
+      getVideoById,
+      updateVideo,
+      deleteVideo,
+      increseVideoViews,
+      changestatus} from "../Requsets/Video.request.js"
 
 
 
@@ -17,5 +24,14 @@ export{
     Sidebar,
     LoginPage,
     RegisterPage,
-    register, loginreq, logout, updaterefreshtoken, getcurrentUser, updateuser, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword
+    UploadVideopage,
+    register, loginreq, logoutreq, updaterefreshtoken, getcurrentUser, updateuser, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword,
+     uploadVideo,
+      getAllVideos,
+      getVideoById,
+      updateVideo,
+      deleteVideo,
+      increseVideoViews,
+      changestatus,
+    
 }
