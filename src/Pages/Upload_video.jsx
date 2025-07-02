@@ -38,32 +38,32 @@ export default function uploadVideopage() {
 
   const dispatch = useDispatch();
   const handleSubmit =async (e) => {
-
+   
     e.preventDefault();
-
+   setuploading(true)
     setErrors({});
     // console.log(formData);
     
        if(formData.videoFile.type.split('/')[0]!='video'){
         setErrors(prev => ({ ...prev, videoFile:'Videofile should be a video'}));     
-
+      setuploading(false)
         return;
     }
     if(!formData.tittle.trim()){
          setErrors(prev => ({ ...prev, tittle:'tittle is required'}));     
-
+        setuploading(false)
         return;
     }
         
     if(!formData.description.trim()){
          setErrors(prev => ({ ...prev, description:'description is required'}));     
-
+        setuploading(false)
         return;
     }
 
      if(formData.thumbnail&&formData.thumbnail.type.split('/')[0]!='image'){
         setErrors(prev => ({ ...prev, thumbnail:'thumbnail should be an image'}));     
-
+         setuploading(false)
         return;
     }
 
@@ -75,12 +75,18 @@ export default function uploadVideopage() {
         fdata.append(key, formData[key]);
       }
     }
-   fdata.forEach((value, key) => {
-  console.log(key, value);
-    });
+     const result=await uploadVideo(fdata);
+     if(result.error){
+          setErrors(prev => ({ ...prev, general:result.error.message}));     
+          setuploading(false)
+        return;
+     }
 
+     setuploading(false)
+     Navigate('/', { replace: true });
 }
 
+const [uploading,setuploading]=useState(fasle);
   
 
 
@@ -161,9 +167,9 @@ export default function uploadVideopage() {
            <option value="true">Public</option>
              <option value="false">Private</option>
             </select>
-            
-            <button type='submit'className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Publish</button>
-        
+              
+            <button type='submit'className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">{{uploading}?"uploading":"Upload"}</button>
+             {errors.general && <span className="text-red-500 text-sm relative -top-3">{errors.genreal}</span>}
       </form>
     </div>
 

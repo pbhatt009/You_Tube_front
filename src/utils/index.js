@@ -4,6 +4,8 @@ import Sidebar from "../components/Sidebar.jsx";
 import LoginPage from "../Pages/Login.jsx";
 import RegisterPage from "../Pages/Register.jsx";
 import UploadVideopage from "../Pages/Upload_video.jsx"
+import HomePage from "../Pages/Home.jsx";
+import timeAgo from "./Time_ago.jsx";
 import {register, loginreq, logoutreq, updaterefreshtoken, getcurrentUser, updateuser, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword} from "../Requsets/User.requests.js"
 
 import {  uploadVideo,
@@ -24,7 +26,7 @@ export{
     Sidebar,
     LoginPage,
     RegisterPage,
-    UploadVideopage,
+    UploadVideopage,HomePage,
     register, loginreq, logoutreq, updaterefreshtoken, getcurrentUser, updateuser, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword,
      uploadVideo,
       getAllVideos,
@@ -33,5 +35,5 @@ export{
       deleteVideo,
       increseVideoViews,
       changestatus,
-    
+    timeAgo
 }

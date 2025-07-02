@@ -1,25 +1,34 @@
-
+import React from "react"
+import { timeAgo } from "../utils"
 export default function VideoContainer({videodata}){
 
 
 return(
-<div className="flex flex-col">
-<img src={videodata.thumbnail} alt="No Thumbnail" className="w-full h-[60%]" />
-<div className="flex w-full">
-    <img src={videodata.ownerinfo.thumbnail} alt="" />
-    <p className="">{videodata.tittle}</p>
-</div>
- <div className="flex ">
-    <span>{videodata.ownerinfo.fullName}</span>
-    
- </div>
- <div className="flex flex-row">
-   <span>{`${videodata.views} views`}</span>
-    <span> {timeAgo(videodata.createdAt)}</span>
+<div className=" box-border  flex flex-col w-full  max-w-sm rounded-xl shadow-md bg-white overflow-hidden gap-2">
+  <img
+    src={videodata.thumbnail}
+    alt="No Thumbnail"
+    className="w-full h-48 object-cover"
+  />
 
- </div>
+  <div className="flex items-start gap-3 px-3">
+    <img
+      src={videodata?.ownerinfo?.avatar}
+      alt="no avatar"
+      className="w-10 h-10 rounded-full object-cover"
+    />
+    <div className="flex flex-col">
+      <p className="text-base font-semibold line-clamp-2">{videodata.tittle}</p>
+      <span className="text-sm text-gray-600">{videodata?.ownerinfo?.fullName}</span>
+    </div>
+  </div>
 
+  <div className="flex justify-between text-sm text-gray-500 px-3 pb-3">
+    <span>{`${videodata.views} views`}</span>
+    <span>{timeAgo(videodata.createdAt)}</span>
+  </div>
 </div>
+
 
 )
 

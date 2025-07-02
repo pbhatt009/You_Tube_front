@@ -64,6 +64,7 @@ const getcurrentUser = asynchandeler(async () => {
   
   })
    const getchanneldetails = asynchandeler(async (channename) => {
+ 
      const result=await axios.get(`/api/v1/user/channel/${channename}`,{
        withCredentials: true,
      })

@@ -19,8 +19,8 @@ const uploadVideo = asynchandeler(async (data) => {
         limit: data.limit,
         query: data.query,
         sortBy: data.sortBy,
-        sortType: data.sortType,
-        mine: data.mine
+        sortType: parseInt(data.sortType),
+        mine: parseInt(data.mine)
       },
       withCredentials: true,
     });

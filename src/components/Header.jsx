@@ -11,8 +11,11 @@ import {
 } from "@heroicons/react/24/outline";
 import { useSelector,useDispatch } from 'react-redux';
 import { useState } from 'react';
-import RightSidebar from './RightSidebar';
+import RightSidebar from './RightSidebar.jsx';
+
+import { changequery } from '../Store/query.jsx';
 export default function Header() {
+  const dispatch=useDispatch()
   const[showsearch,setsearch]=useState(false);
   const changesearch=(e)=>{
      e.preventDefault();
@@ -26,14 +29,15 @@ export default function Header() {
   }
   const searchhandel=(e)=>{
     e.preventDefault();
-    if(!e.target.value.trim()) return;
+    console.log(e.target[0].value)
+    dispatch(changequery(e.target[0].value))
 
   }
   const[showrightsidebar,setrightsidebar]=useState(false)
   const rsbarfn=()=>{
        setrightsidebar(prev=>!prev)
   }
-  const dispatch = useDispatch();
+ 
   const userdata = useSelector((state) => state.auth.userdata);
   console.log("user",userdata.avatar);
     return(
@@ -41,11 +45,12 @@ export default function Header() {
           <nav className=" flex sticky hinset-x-0 top-0 z-50 w-[100vw] h-[10vh] sm:h-[12vh] lg:h-[11vh] border-b border-white bg-[#121212] px-4 color-white text-amber-50  items-center py-2">
             <div hidden={showsearch} className="mr-4 w-12 shrink-0 sm:w-16">logo</div>
             <div className="relative mx-auto hidden w-full max-w-md overflow-hidden sm:block">
-              <form >
+              <form onSubmit={searchhandel} >
               <input
               type='search'
                 className="w-full border bg-transparent py-1 pl-8 pr-3 placeholder-white outline-none sm:py-2"
                 placeholder="Search"
+                name='search'
               />
               </form>
               <span className="absolute left-2.5 top-1/2 inline-block -translate-y-1/2">
@@ -65,6 +70,7 @@ export default function Header() {
               type='search'
                 className="w-full border bg-transparent py-1 pl-8 pr-3 placeholder-white outline-none sm:py-2"
                 placeholder="Search"
+                name='search'
               />
             
               </form>
