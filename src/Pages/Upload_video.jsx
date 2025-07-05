@@ -86,7 +86,7 @@ export default function uploadVideopage() {
      Navigate('/', { replace: true });
 }
 
-const [uploading,setuploading]=useState(fasle);
+const [uploading,setuploading]=useState(false);
   
 
 
@@ -168,7 +168,7 @@ const [uploading,setuploading]=useState(fasle);
              <option value="false">Private</option>
             </select>
               
-            <button type='submit'className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">{{uploading}?"uploading":"Upload"}</button>
+            <button type='submit'className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">{uploading?"uploading...":"Upload"}</button>
              {errors.general && <span className="text-red-500 text-sm relative -top-3">{errors.genreal}</span>}
       </form>
     </div>

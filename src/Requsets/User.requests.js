@@ -94,4 +94,11 @@ const getcurrentUser = asynchandeler(async () => {
 
    })
 
-  export { register, loginreq, logoutreq, updaterefreshtoken, getcurrentUser, updateuser, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword};
+   const getsubscripition=asynchandeler(async()=>{
+      const result=await axios.get('/api/v1/user/subscripition',{},{
+       withCredentials: true,
+     })
+     return result;
+   })
+
+  export { register, loginreq, logoutreq, updaterefreshtoken, getcurrentUser, updateuser, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword,getsubscripition};

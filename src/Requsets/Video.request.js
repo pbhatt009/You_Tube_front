@@ -15,12 +15,12 @@ const uploadVideo = asynchandeler(async (data) => {
             ////2nd method
     const result = await axios.get(`/api/v1/video/getallVideos`, {
       params: {
-        page: data.page,
-        limit: data.limit,
-        query: data.query,
-        sortBy: data.sortBy,
-        sortType: parseInt(data.sortType),
-        mine: parseInt(data.mine)
+        page: data.page||1,
+        limit: data.limit||10,
+        query: data.query||"",
+        sortBy: data.sortBy||"views",
+        sortType: parseInt(data.sortType)||-1,
+        mine: parseInt(data.mine)||-1
       },
       withCredentials: true,
     });

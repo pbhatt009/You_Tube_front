@@ -11,7 +11,7 @@ return(
     className="w-full h-48 object-cover"
   />
 
-  <div className="flex items-start gap-3 px-3">
+  <div className="flex items-start gap-3 w-full px-3 relative">
     <img
       src={videodata?.ownerinfo?.avatar}
       alt="no avatar"
@@ -20,6 +20,9 @@ return(
     <div className="flex flex-col">
       <p className="text-base font-semibold line-clamp-2">{videodata.tittle}</p>
       <span className="text-sm text-gray-600">{videodata?.ownerinfo?.fullName}</span>
+    </div>
+    <div className="text-gray-600 text-xs absolute right-10 justify-center self-center">
+      {videodata.isPublic?"Public":"Private"}
     </div>
   </div>
 

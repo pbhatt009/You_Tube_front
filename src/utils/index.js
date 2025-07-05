@@ -6,7 +6,10 @@ import RegisterPage from "../Pages/Register.jsx";
 import UploadVideopage from "../Pages/Upload_video.jsx"
 import HomePage from "../Pages/Home.jsx";
 import timeAgo from "./Time_ago.jsx";
-import {register, loginreq, logoutreq, updaterefreshtoken, getcurrentUser, updateuser, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword} from "../Requsets/User.requests.js"
+import Myvideos from "../Pages/MyVideos.jsx";
+import Subscripition from "../Pages/Subscripition.jsx";
+import WatchHistory from "../Pages/Watch_history.jsx";
+import {register, loginreq, logoutreq, updaterefreshtoken, getcurrentUser, updateuser,getsubscripition, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword} from "../Requsets/User.requests.js"
 
 import {  uploadVideo,
       getAllVideos,
@@ -17,7 +20,7 @@ import {  uploadVideo,
       changestatus} from "../Requsets/Video.request.js"
 
 
-
+  import{subscribe, unsubscribe } from "../Requsets/subscripition.js"
 
 
 export{
@@ -27,6 +30,7 @@ export{
     LoginPage,
     RegisterPage,
     UploadVideopage,HomePage,
+    WatchHistory,
     register, loginreq, logoutreq, updaterefreshtoken, getcurrentUser, updateuser, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword,
      uploadVideo,
       getAllVideos,
@@ -35,5 +39,8 @@ export{
       deleteVideo,
       increseVideoViews,
       changestatus,
-    timeAgo
+      getsubscripition,
+    timeAgo,
+    subscribe,unsubscribe,
+    Myvideos,Subscripition
 }
