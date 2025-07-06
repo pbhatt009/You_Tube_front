@@ -1,9 +1,11 @@
 import { useState } from "react"
 import { subscribe,unsubscribe } from "../utils/index.js"
+import { useNavigate } from "react-router-dom"
 
 function Chanel_Container({channel}){
     const[issub,setissub]=useState(channel.issubscribed)
     const [error,seterror]=useState("")
+    const navigate=useNavigate()
     const handelsubsucribe=async ()=>{
           let result
             if(channel.issubscribed ){
@@ -20,7 +22,18 @@ function Chanel_Container({channel}){
             setissub(prev=>!prev)
             return;
     }
-return(<div key={channel._id} className="flex items-center w-full justify-between p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition duration-200">
+  const handleParentClick = () => {
+    console.log("Parent div clicked");
+    navigate('/dashboard', { state: { channel}});
+
+  };
+
+  const handleChildClick = (e) => {
+    e.stopPropagation(); // Prevents parent click
+    console.log("Child button clicked");
+    handelsubsucribe()
+  };
+return(<div  key={channel._id} onClick={handleParentClick} className="flex items-center w-full justify-between p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition duration-200">
   <div className="flex items-center space-x-4">
     <img
       src={channel.avatar}
@@ -35,7 +48,7 @@ return(<div key={channel._id} className="flex items-center w-full justify-betwee
   </div>
   
   <button
-  onClick={handelsubsucribe}
+  onClick={handleChildClick}
     className={`px-4 py-1 rounded-md font-medium text-sm transition 
       ${issub
         ? 'bg-gray-300 text-gray-700' 

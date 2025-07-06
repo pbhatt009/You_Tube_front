@@ -40,7 +40,8 @@ export default function Myvideos(){
          
          if(allvideos.error){
             seterror(prev=>({...prev,videoeror:allvideos.error.message}))
-           return;
+             setLoading(false)
+            return;
         }
        
     

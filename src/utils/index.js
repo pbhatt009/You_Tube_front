@@ -9,6 +9,7 @@ import timeAgo from "./Time_ago.jsx";
 import Myvideos from "../Pages/MyVideos.jsx";
 import Subscripition from "../Pages/Subscripition.jsx";
 import WatchHistory from "../Pages/Watch_history.jsx";
+import ChannelDashboard from "../Pages/Channel_Dashboard.jsx";
 import {register, loginreq, logoutreq, updaterefreshtoken, getcurrentUser, updateuser,getsubscripition, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword} from "../Requsets/User.requests.js"
 
 import {  uploadVideo,
@@ -31,6 +32,7 @@ export{
     RegisterPage,
     UploadVideopage,HomePage,
     WatchHistory,
+    ChannelDashboard,
     register, loginreq, logoutreq, updaterefreshtoken, getcurrentUser, updateuser, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword,
      uploadVideo,
       getAllVideos,

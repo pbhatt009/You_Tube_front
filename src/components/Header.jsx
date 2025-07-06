@@ -39,7 +39,7 @@ export default function Header() {
   }
  
   const userdata = useSelector((state) => state.auth.userdata);
-  console.log("user",userdata.avatar);
+
     return(
         <header >
           <nav className=" flex sticky hinset-x-0 top-0 z-50 w-[100vw] h-[10vh] sm:h-[12vh] lg:h-[11vh] border-b border-white bg-[#121212] px-4 color-white text-amber-50  items-center py-2">

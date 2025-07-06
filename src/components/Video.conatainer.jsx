@@ -1,8 +1,16 @@
-import React from "react"
+import React, { useState ,useEffect} from "react"
 import { timeAgo } from "../utils"
+import { useSelector } from "react-redux";
 export default function VideoContainer({videodata}){
-
-
+   const userdetails=useSelector(state=>state.auth.userdata);
+     const[ismine,setismine]=useState(false);
+    useEffect(() => {
+  if (userdetails && videodata && userdetails._id === videodata.owner) {
+    setismine(true);
+  } else {
+    setismine(false);
+  }
+}, [userdetails, videodata]);
 return(
 <div className=" box-border  flex flex-col w-full  max-w-sm rounded-xl shadow-md bg-white overflow-hidden gap-2">
   <img
@@ -28,6 +36,7 @@ return(
 
   <div className="flex justify-between text-sm text-gray-500 px-3 pb-3">
     <span>{`${videodata.views} views`}</span>
+    <button hidden={!ismine} disabled={!ismine} className="bg-blue-700 text-white w-15 h-6 rounded-2xl">Edit</button>
     <span>{timeAgo(videodata.createdAt)}</span>
   </div>
 </div>

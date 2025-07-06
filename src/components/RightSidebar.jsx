@@ -1,26 +1,30 @@
 import { XCircleIcon,TvIcon,Cog6ToothIcon,PlusIcon} from "@heroicons/react/24/outline"
-import { useState,useEffect } from "react"
+import { useState,useEffect, useCallback } from "react"
 import { useSelector,useDispatch } from "react-redux"
 import { Link ,useNavigate} from "react-router-dom"
 import { logoutreq } from "../utils/index.js"
 import { logout } from "../Store/Auth_reducer.jsx"
+import { getchanneldetails } from "../utils/index.js"
 
 export default function RightSidebar({show ,changeshow}){
 const userdata=useSelector(state=>(state.auth.userdata))
 const dispatch=useDispatch()
-console.log(userdata.avatar)
+const[error,seterror]=useState("")
+
+const navigate=useNavigate()
+
 
 const navItems = [
   
-  {name:'My Channel', to: '/my-channel', icon:<TvIcon className="h-4 w-4"/> },
+  {name:'My Channel', to: '/dashboard', icon:<TvIcon id='/dashboard' className="h-4 w-4"/> },
  
-     {name:'Channel-Setting', to: '/channel-setting', icon:<Cog6ToothIcon  className="h-4 w-4"/> },
-    { name:'Upload-Video',to: '/uploadVideo',icon:<PlusIcon className="h-4 w-4"/>}
+     {name:'Channel-Setting', to: '/channel-setting', icon:<Cog6ToothIcon id="/channel-setting"  className="h-4 w-4"/> },
+    { name:'Upload-Video',to: '/uploadVideo',icon:<PlusIcon id= '/uploadVideo' className="h-4 w-4"/>}
  
  
 ];
- const navigate=useNavigate()
-const [error,seterror]=useState("")
+
+
 const handleLogout=async (e)=>{
      e.preventDefault();
    const result=await(logoutreq())
@@ -36,6 +40,26 @@ const handleLogout=async (e)=>{
 
 }
 
+const handel=async (e)=>{
+  
+  let channel={};
+  console.log(e.target.id)
+  if(e.target.id=="/dashboard"){
+     const result=await getchanneldetails(userdata.username)
+        if(result.error){
+          seterror(result.error.message)
+          return;
+        }
+        channel=result.data.data;
+        // console.log("i am ere",channel[0])
+         navigate('/dashboard', { state:{ channel:channel[0]}});
+  }
+  else{
+     navigate(e.target.id)
+  }
+  changeshow()
+
+}
    return (
 <div hidden={!show} className="h-screen w-[70vw] lg:w-[20vw] sm:w-[40vw] md:w-[30vw] bg-black border-amber-50 text-white fixed top-0 z-100 right-0  ">
  <button onClick={changeshow}>
@@ -51,14 +75,15 @@ const handleLogout=async (e)=>{
 
  {navItems.map(item => (
   <div key={item.name} className=" h-17  w-full border-t border-b  border-gray-400 flex justify-center ">
-    <Link
-      to={item.to}
+    <buttton
+      id={item.to}
       className=" items-center h-full w-full space-x-3 p-2 rounded-lg hover:bg-gray-700 flex justify-center"
-       onClick={changeshow}
+       onClick={handel}
+       
     >
       {item.icon}
-      <span>{item.name}</span>
-    </Link>
+      <span id={item.to}>{item.name}</span>
+    </buttton>
   </div>
 ))
         }
