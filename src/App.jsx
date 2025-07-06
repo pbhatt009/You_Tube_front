@@ -67,13 +67,15 @@ else return (
  
 <Header className="sticky top-0 z-50" />
 
-<div className='flex w-full flex-row h-[90vh] sm:h-[88vh] lg:h-[89vh]'>
+<div className='flex w-full flex-row h-[80vh] sm:h-[88vh] lg:h-[89vh]'>
 <Sidebar/>
 <main className=' w-full sm:w-[81vw] lg:w-[85vw] xl:w-[89vw] h-full'>
 <Outlet />
 </main>
 </div>
+<div className='w-full h:[8vh]'>
 <Footer/>
+</div>
 
 </div>
   

@@ -56,7 +56,7 @@ export default function RegisterForm() {
     }
     if (formData.password.length < 6) {
       setErrors(prev => ({ ...prev, password: 'Password must be at least 6 characters' }));     
-      console.log('Password must be at least 6 characters');
+      // console.log('Password must be at least 6 characters');
         setRegisterProcessing(false);
       return;
     }
@@ -65,7 +65,7 @@ export default function RegisterForm() {
        setRegisterProcessing(false);
         return;
     }
-    console.log()
+    // console.log()
        if(formData.coverImage&&formData.coverImage?.type.split('/')[0]!='image'){
         setErrors(prev => ({ ...prev,coverImage:'cover image should be an image'}));     
        setRegisterProcessing(false);

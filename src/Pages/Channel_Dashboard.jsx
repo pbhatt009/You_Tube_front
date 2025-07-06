@@ -35,41 +35,11 @@ export default function ChannelDashboard() {
             return;
     }
   /////video handeling
-  const[filter,setfilter]=useState({})
-    const [formdata,setformdata]=useState({})
-    const[showfilter,setshowfilter]=useState(false)
-  const[videoarr, setvideos]=useState([])
-//   const[page,setpage]=useState()
-//       const getvideosChannel=useCallback(async()=>{
-//            seterror({ videoeror:"",})
-//           //  console.log(filter)
-//            const allvideos=await getAllVideos(filter)
-          
-           
-           
-//            if(allvideos.error){
-//               seterror(prev=>({...prev,videoeror:allvideos.error.message}))
-//              return;
-//           }
-         
-      
-//            setvideos(allvideos.data.data.itemsList);
-//            setpage(allvideos.data.data.paginator)
-            
-                
-//            setLoading(false)
-//       },[filter])
-//       useEffect(()=>{
-          
-//            console.log("videosss",videoarr[0]?.ownerinfo)
-//       },[videoarr])
-//       useEffect(()=>{
-           
-//             getvideosChannel()
-            
-           
-//       },[filter])
-   
+//   const[filter,setfilter]=useState({})
+//     const [formdata,setformdata]=useState({})
+//     const[showfilter,setshowfilter]=useState(false)
+//   const[videoarr, setvideos]=useState([])
+
 
   console.log(channel.coverImage)
   return (
@@ -80,6 +50,7 @@ export default function ChannelDashboard() {
           src={channel.coverImage}
           alt="Cover Image not found"
           className="w-full h-full object-cover rounded-lg"
+               onClick={() => window.open( channel.coverImage,'_blank')}
         />:
         <div className="w-full h-60  object-cover rounded-lg justify-center items-center flex bg-gray-200">
           <p className="text-3xl">no cover image</p>
@@ -90,6 +61,7 @@ export default function ChannelDashboard() {
             src={channel.avatar}
             alt="Avatar"
             className="w-24 h-24 rounded-full border-4 border-white"
+            onClick={() => window.open(channel.avatar, '_blank')}
           />
         </div>
       </div>

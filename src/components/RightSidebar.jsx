@@ -10,7 +10,7 @@ export default function RightSidebar({show ,changeshow}){
 const userdata=useSelector(state=>(state.auth.userdata))
 const dispatch=useDispatch()
 const[error,seterror]=useState("")
-
+const userdeatils=useSelector(state=>state.auth.userdata);
 const navigate=useNavigate()
 
 
@@ -18,7 +18,7 @@ const navItems = [
   
   {name:'My Channel', to: '/dashboard', icon:<TvIcon id='/dashboard' className="h-4 w-4"/> },
  
-     {name:'Channel-Setting', to: '/channel-setting', icon:<Cog6ToothIcon id="/channel-setting"  className="h-4 w-4"/> },
+     {name:'edit-channel', to: '/edit-channel', icon:<Cog6ToothIcon id="/edit-channel"  className="h-4 w-4"/> },
     { name:'Upload-Video',to: '/uploadVideo',icon:<PlusIcon id= '/uploadVideo' className="h-4 w-4"/>}
  
  
@@ -53,6 +53,10 @@ const handel=async (e)=>{
         channel=result.data.data;
         // console.log("i am ere",channel[0])
          navigate('/dashboard', { state:{ channel:channel[0]}});
+  }
+  else if(e.target.id=='/edit-channel'){
+    // console.log(userdeatils)
+    navigate('/edit-channel', { state:{channelData:userdeatils}});
   }
   else{
      navigate(e.target.id)

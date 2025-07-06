@@ -13,7 +13,7 @@ const navItems = [
 
 const Footer = () => {
   return (
-    <div className="fixed bottom-0 left-0 w-full h-15 bg-black text-white  sm:hidden opacity-85 text-xs mt-5">
+    <div className="w-full bg-black text-white  sm:hidden opacity-85 text-xs">
 
 
         <div className='flex flex-row  justify-evenly relative'>

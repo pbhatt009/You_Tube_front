@@ -10,6 +10,7 @@ import Myvideos from "../Pages/MyVideos.jsx";
 import Subscripition from "../Pages/Subscripition.jsx";
 import WatchHistory from "../Pages/Watch_history.jsx";
 import ChannelDashboard from "../Pages/Channel_Dashboard.jsx";
+import EditChannelPage from "../Pages/Edit_channel.jsx";
 import {register, loginreq, logoutreq, updaterefreshtoken, getcurrentUser, updateuser,getsubscripition, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword} from "../Requsets/User.requests.js"
 
 import {  uploadVideo,
@@ -44,5 +45,6 @@ export{
       getsubscripition,
     timeAgo,
     subscribe,unsubscribe,
-    Myvideos,Subscripition
+    Myvideos,Subscripition,
+    EditChannelPage
 }
