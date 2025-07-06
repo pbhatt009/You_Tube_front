@@ -6,7 +6,7 @@ import './index.css'
 import { useSelector,useDispatch } from 'react-redux'
 import App from './App.jsx'
 import store from "../src/Store/store.js"
-import { Header, Footer, Sidebar, LoginPage,RegisterPage,getcurrentUser,UploadVideopage,HomePage,Myvideos,Subscripition,WatchHistory,ChannelDashboard,EditChannelPage } from './utils/index.js'
+import { Header, Footer, Sidebar, LoginPage,RegisterPage,getcurrentUser,UploadVideopage,HomePage,Myvideos,Subscripition,WatchHistory,ChannelDashboard,EditChannelPage,ChangePasswordPage,UpdateVideoPage } from './utils/index.js'
  
  
 
@@ -22,11 +22,13 @@ const router=createBrowserRouter(createRoutesFromElements(
 <Route path='/history'element={<WatchHistory/>}></Route>
 <Route path='/dashboard'element={<ChannelDashboard/>}></Route>
 <Route path='/edit-channel'element={<EditChannelPage/>}></Route>
-</Route>
+<Route path='/changepassword' element={<ChangePasswordPage/>}></Route>
+<Route path='/updateVideo' element={<UpdateVideoPage/>}></Route></Route>
 
 {/* public routes */}
 <Route path='/login'element={<LoginPage/>}></Route>
 <Route path='/register' element={<RegisterPage/>}></Route>
+
 </>
 ))
 createRoot(document.getElementById('root')).render(

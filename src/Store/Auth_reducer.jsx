@@ -19,11 +19,14 @@ const authslice=createSlice({
      
         state.status=false
         state.userdata=null
+      },
+      changestatus:(state)=>{
+        state.status=!state.status
       }
    }
 
 
 
 })
-export const {login,logout}=authslice.actions;
+export const {login,logout,changestatus}=authslice.actions;
 export default authslice.reducer;

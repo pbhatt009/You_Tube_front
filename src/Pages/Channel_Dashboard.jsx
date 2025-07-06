@@ -1,12 +1,13 @@
 import React, { useEffect,useCallback } from "react";
 import VideoContainer from "../components/Video.conatainer.jsx";
-import { useLocation } from 'react-router-dom';
+import { useLocation,useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { subscribe } from "../Requsets/subscripition.js";
 import { getAllVideos} from "../utils/index.js"
 
 export default function ChannelDashboard() {
+    const navigate=useNavigate()
     const userdetails=useSelector(state=>state.auth.userdata);
     const location=useLocation()
      const{channel}=location.state||{};
@@ -41,7 +42,9 @@ export default function ChannelDashboard() {
 //   const[videoarr, setvideos]=useState([])
 
 
-  console.log(channel.coverImage)
+   const setting=()=>{
+          navigate('/edit-channel', { state:{channelData:channel}});
+   }
   return (
     <div className="w-full h-full flex flex-col gap-6 overflow-y-scroll">
       {/* Cover Image */}
@@ -78,7 +81,7 @@ export default function ChannelDashboard() {
 
         {isMyChannel?(
           <div className="mt-2">
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">
+            <button onClick={setting} className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">
               Edit Channel
             </button>
           </div>

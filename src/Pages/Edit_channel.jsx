@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { updateavatar,updatecoverimage,updateuser } from '../utils';
+import { useDispatch } from 'react-redux';
+import { changestatus ,login} from '../Store/Auth_reducer.jsx';
 export default function EditChannelPage() {
       const location=useLocation()
      const{channelData}=location.state||{};
@@ -8,10 +10,11 @@ export default function EditChannelPage() {
     username: channelData.username || '',
     fullName: channelData.fullName || '',
     email: channelData.email || '',
-    avatar: null,
-    coverImage: null,
+    avatar:null,
+    coverImage:null
   });
-
+ const navigate=useNavigate();
+ const dispatch=useDispatch()
   const [avatarPreview, setAvatarPreview] = useState(channelData.avatar || '');
   const [coverPreview, setCoverPreview] = useState(channelData.coverImage || '');
   const[Processing,setRegisterProcessing]=useState(false);
@@ -21,6 +24,7 @@ export default function EditChannelPage() {
   };
    
   const handleImageChange = (e, type) => {
+    e.preventDefault()
     const file = e.target.files[0];
     if (!file) return;
  
@@ -48,33 +52,65 @@ export default function EditChannelPage() {
     }
   };
 
-  const[error, setErrors]=useState({})
-  const handleSubmit = (e) => {
+  const[errors, setErrors]=useState({})
+  const handleSubmit =async (e) => {
     e.preventDefault();
        // console.log(formData);
+       setErrors({})
        setRegisterProcessing(true)
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if(!emailRegex.test(formData.email)) {
       setErrors(prev => ({ ...prev, email: 'Invalid email format' }));
-      console.log('Invalid email format');
+     
       setRegisterProcessing(false);
 
       return;
     }
  
-     if(formData.avatar.type.split('/')[0]!='image'){
-        setErrors(prev => ({ ...prev, avatar:'avatar should be an image'}));     
-       setRegisterProcessing(false);
+  
+
+     //update cover image
+     
+        const fdata_cover=new FormData();
+    fdata_cover.append("coverImage",formData["coverImage"])
+      if(formData.coverImage){const r1=await updatecoverimage(fdata_cover)
+      if(r1.error){
+        setErrors(prev=>({...prev,general:r1.error.message}))
+        setRegisterProcessing(false);
         return;
+      }
+      else setCoverPreview(r1.data.data.coverImage)
     }
-    // console.log()
-       if(formData.coverImage&&formData.coverImage?.type.split('/')[0]!='image'){
-        setErrors(prev => ({ ...prev,coverImage:'cover image should be an image'}));     
-       setRegisterProcessing(false);
+    //update avatar
+    const fdata_avatar=new FormData();
+    fdata_avatar.append("avatar",formData["avatar"])
+    if(formData.avatar){
+      const r2=await updateavatar(fdata_avatar)
+      if(r2.error){
+        setErrors(prev=>({...prev,general:r2.error.message}))
+        setRegisterProcessing(false);
         return;
+      }
+      else setAvatarPreview(r2.data.data.avatar)
     }
- 
-  };
+
+      ///update info
+      const fdata = Object.fromEntries(
+  Object.entries(formData).filter(
+    ([key]) => key !== 'avatar' && key !== 'coverImage'
+  )
+);
+
+const r=await updateuser(fdata)
+          if(r.error){
+        setErrors(prev=>({...prev,general:r.error.message}))
+        setRegisterProcessing(false);
+        return;
+      }
+       dispatch(login(r.data.data))
+        navigate('/');
+        setRegisterProcessing(false)
+  }
 
   return (
     <div className="w-full h-full flex flex-col gap-6 overflow-y-scroll">
@@ -90,6 +126,7 @@ export default function EditChannelPage() {
         <label className="relative -top-10 -right-10 z-100 bg-black/60 text-white text-sm px-3 py-1 rounded cursor-pointer hover:bg-black">
           Edit Cover
           <input
+            
             type="file"
             accept="image/*"
             className="hidden"
@@ -97,6 +134,7 @@ export default function EditChannelPage() {
           />
         </label>
       </div>
+        {errors.coverImage && <span className="text-red-500 self-center text-sm relative -top-3">{errors.coverImage}</span>}
 
       {/* Avatar */}
       <div className="relative w-32 h-32 mx-auto">
@@ -115,12 +153,15 @@ export default function EditChannelPage() {
           />
         </label>
       </div>
-
+         {errors.avatar && <span className="text-red-500 text-sm relative -top-3 self-center">{errors.avatar}</span>}
       {/* Text Fields */}
+     
+     
       <form onSubmit={handleSubmit} className="space-y-4 w-full flex flex-col justify-center items-center">
         <div>
           <label className="block text-sm font-medium text-gray-700">Username</label>
           <input
+          type='text'
             name="username"
             value={formData.username}
             onChange={handleTextChange}
@@ -132,6 +173,7 @@ export default function EditChannelPage() {
         <div>
           <label className="block text-sm font-medium text-gray-700">Full Name</label>
           <input
+          type='text'
             name="fullName"
             value={formData.fullName}
             onChange={handleTextChange}
@@ -151,13 +193,15 @@ export default function EditChannelPage() {
             required
           />
         </div>
-
+          {errors.email && <span className="text-red-500 self-center text-sm relative -top-3">{errors.email}</span>}
+        <div className='flex  justify-center items-center'><p className='text-red-500 self-center text-sm'>{errors.general}</p></div>
         <button
           type="submit"
           className="w-50 mb-5 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition"
         >
-          Save Changes
+         {!Processing?" Save Changes":"updating..."}
         </button>
+
       </form>
     </div>
   );

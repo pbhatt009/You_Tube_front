@@ -1,4 +1,4 @@
-import { XCircleIcon,TvIcon,Cog6ToothIcon,PlusIcon} from "@heroicons/react/24/outline"
+import { XCircleIcon,TvIcon,Cog6ToothIcon,PlusIcon,LockClosedIcon} from "@heroicons/react/24/outline"
 import { useState,useEffect, useCallback } from "react"
 import { useSelector,useDispatch } from "react-redux"
 import { Link ,useNavigate} from "react-router-dom"
@@ -18,9 +18,9 @@ const navItems = [
   
   {name:'My Channel', to: '/dashboard', icon:<TvIcon id='/dashboard' className="h-4 w-4"/> },
  
-     {name:'edit-channel', to: '/edit-channel', icon:<Cog6ToothIcon id="/edit-channel"  className="h-4 w-4"/> },
-    { name:'Upload-Video',to: '/uploadVideo',icon:<PlusIcon id= '/uploadVideo' className="h-4 w-4"/>}
- 
+     {name:'Edit-channel', to: '/edit-channel', icon:<Cog6ToothIcon id="/edit-channel"  className="h-4 w-4"/> },
+    { name:'Upload-Video',to: '/uploadVideo',icon:<PlusIcon id= '/uploadVideo' className="h-4 w-4"/>},
+      { name:'Change Password',to: '/changepassword',icon:<LockClosedIcon id= '/changepassword' className="h-4 w-4"/>}
  
 ];
 
