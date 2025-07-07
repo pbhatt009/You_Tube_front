@@ -3,8 +3,8 @@ import VideoContainer from "../components/Video.conatainer.jsx";
 import { useLocation,useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { subscribe } from "../Requsets/subscripition.js";
-import { getAllVideos} from "../utils/index.js"
+
+import { getAllVideos,subscribe,unsubscribe} from "../utils/index.js"
 
 export default function ChannelDashboard() {
     const navigate=useNavigate()
@@ -107,6 +107,7 @@ export default function ChannelDashboard() {
               <VideoContainer
                 key={video._id}
                 videodata={video}
+                prev='/dashboard'
                 // isEditable={isMyChannel} // You can use this inside VideoContainer to show "Edit"
               />
             ))

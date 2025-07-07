@@ -65,7 +65,7 @@ const handel=async (e)=>{
 
 }
    return (
-<div hidden={!show} className="h-screen w-[70vw] lg:w-[20vw] sm:w-[40vw] md:w-[30vw] bg-black border-amber-50 text-white fixed top-0 z-100 right-0  ">
+<div hidden={!show} className="h-screen w-[70vw] lg:w-[20vw] sm:w-[40vw] md:w-[30vw] bg-black border-amber-50 text-white fixed top-0 z-200 right-0  ">
  <button onClick={changeshow}>
 <XCircleIcon className=" h-10 w-10 absolute right-5"/>
  </button>

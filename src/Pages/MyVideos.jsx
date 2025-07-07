@@ -126,7 +126,7 @@ export default function Myvideos(){
     {videoarr?.length!==0?
     (videoarr.map((video) => {
        
-      return (<VideoContainer key={video._id} videodata={video} />)
+      return (<VideoContainer key={video._id} videodata={video} prev="/my-videos" />)
 })):
 
 <div className="w-full h-100 flex justify-center items-center text-gray-800  text-2xl ">

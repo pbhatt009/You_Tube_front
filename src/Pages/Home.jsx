@@ -146,7 +146,7 @@ const channelpagechange=()=>{
 ) :
  (!channelpage)?
 (
-  <div className="flex flex-wrap mt-5 gap-2 ml-2 mr-1 mb-18 overflow-y-auto sm:mb-5">
+  <div className="flex flex-wrap mt-5 gap-2 ml-2 mr-1 mb-3 overflow-y-auto ">
     {videoarr?.length!==0?
     (videoarr.map((video) => {
        
@@ -160,7 +160,7 @@ const channelpagechange=()=>{
   </div>
 ):
 
-  <div className="flex flex-wrap mt-5 gap-2 ml-2 mr-1 mb-18 overflow-y-auto sm:mb-5">
+  <div className="flex flex-wrap mt-5 gap-2 ml-2 mr-1  overflow-y-auto mb-3">
     {channelarr?.length!==0?
     (channelarr.map((chanel) => {
        
