@@ -83,7 +83,7 @@ export default function uploadVideopage() {
      }
 
      setuploading(false)
-     Navigate('/', { replace: true });
+     Navigate('/my-videos', { replace: true });
 }
 
 const [uploading,setuploading]=useState(false);
@@ -101,6 +101,7 @@ const [uploading,setuploading]=useState(false);
             type="file"
             name="videoFile"
             id="videoFile"
+            accept="video/*"
              required
             onChange={handleChange}
             className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -145,7 +146,7 @@ const [uploading,setuploading]=useState(false);
             type="file"
             name="thumbnail"
             id="thumbnail"
-            
+             accept="image/*"
             onChange={handleChange}
             className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />

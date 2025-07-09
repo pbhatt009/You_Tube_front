@@ -25,8 +25,10 @@ import {  uploadVideo,
 
 
   import{subscribe, unsubscribe } from "../Requsets/subscripition.js"
+  import {addComment, updateComment, deleteComment, getAllComments } from "../Requsets/Comment.js"
+  import { addliketoVideo,addliketocomment,unlikevideo,unlikecomment } from "../Requsets/Like.request.js";
 
-
+ import VideoDashboard from "../Pages/Video_dashboard.jsx";
 export{
     Header,
     Footer,
@@ -51,4 +53,8 @@ export{
     EditChannelPage,
     ChangePasswordPage,
     UpdateVideoPage,
+    addComment, updateComment, deleteComment, getAllComments,
+    addliketoVideo,addliketocomment,unlikevideo,unlikecomment,
+    VideoDashboard
+
 }

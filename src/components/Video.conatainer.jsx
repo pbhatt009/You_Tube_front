@@ -3,7 +3,7 @@ import { timeAgo } from "../utils"
 import { useSelector } from "react-redux";
 import { getchanneldetails } from "../utils/index.js";
 import { replace, useNavigate } from "react-router-dom";
-import { changestatus,deleteVideo } from "../utils/index.js";
+import { changestatus,deleteVideo,getVideoById } from "../utils/index.js";
 import { AdjustmentsVerticalIcon,XCircleIcon } from "@heroicons/react/24/outline";
 export default function VideoContainer({videodata,prev='/'}){
    const userdetails=useSelector(state=>state.auth.userdata);
@@ -24,11 +24,19 @@ export default function VideoContainer({videodata,prev='/'}){
 
 
 
-const parentclick=(e)=>{
-console.log('hii parnet')
+const parentclick=async(e)=>{
+  seterror("")
+const result=await getVideoById(videodata._id);
+if(result.error) {
+      seterror(result.error.message)
+      return;
+    }
+    // console.log(result.data.data)
+    navigate('/videodashboard',{state:{video:result.data.data}})
 }
 const chaneldashboard=async(e)=>{
     e.stopPropagation();
+    seterror("")
     const result=await getchanneldetails(videodata?.ownerinfo?.username);
     if(result.error) {
       seterror(result.error.message)

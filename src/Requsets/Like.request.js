@@ -3,7 +3,7 @@ import axios from "axios";
 
 const addliketoVideo = asynchandeler(async (videoId) => {
   const result = await axios.post(`/api/v1/like/addlike`, {}, {
-    params: { videoId },
+    params: { videoid:videoId },
     withCredentials: true,
   });
   return result;
@@ -11,17 +11,22 @@ const addliketoVideo = asynchandeler(async (videoId) => {
 
 const addliketocomment = asynchandeler(async (commentId) => {
   const result = await axios.post(`/api/v1/like/addlike`, {}, {
-    params: {commentId },
+    params: {commentid:commentId },
     withCredentials: true,
   });
   return result;
 });
 
-const unlike= asynchandeler(async (commentid) => {
-  const result = await axios.delete(`/api/v1/like/unlike/${commentid}`, {
+const unlikevideo= asynchandeler(async (id) => {
+  const result = await axios.delete(`/api/v1/like/unlikevideo/${id}`, {
  withCredentials: true,
   });
   return result;
 });
-
-export { addliketoVideo, addliketocomment, unlike };
+const unlikecomment= asynchandeler(async (id) => {
+  const result = await axios.delete(`/api/v1/like/unlikecomment/${id}`, {
+ withCredentials: true,
+  });
+  return result;
+});
+export { addliketoVideo, addliketocomment, unlikevideo,unlikecomment };

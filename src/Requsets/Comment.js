@@ -20,8 +20,13 @@ const deleteComment = asynchandeler(async (videoid,commentId) => {
   });
   return result;
 });
-const getAllComments = asynchandeler(async (videoid) => {
+const getAllComments = asynchandeler(async (videoid,data) => {
   const result = await axios.get(`/api/v1/comment/${videoid}/getcomments`, {
+        params: {
+        page: data.page||1,
+        limit: data.limit||30,
+       
+      },
     withCredentials: true,
   });
   return result;
