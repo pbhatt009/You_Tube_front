@@ -219,7 +219,7 @@ export default function VideoDashboard() {
                                 </div>
                             </div>
                             <div className="flex items-center gap-3">
-                                {ismine && (
+                                {isAuthenticated&&ismine && (
                                     <button
                                         onClick={editvideo}
                                         className='px-4 py-2 rounded-lg text-sm text-white font-medium bg-blue-600 hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2'
