@@ -13,12 +13,26 @@ const uploadVideo = asynchandeler(async (data) => {
 const getAllVideos = asynchandeler(async (data) => {
   const result = await axios.get(`${apiUrl}/v1/video/getallVideos`, {
     params: {
-      page: data.page || 1,
-      limit: data.limit || 10,
-      query: data.query || "",
-      sortBy: data.sortBy || "views",
-      sortType: parseInt(data.sortType) || -1,
-      mine: parseInt(data.mine) || -1
+      page: data?.page || 1,
+      limit: data?.limit || 10,
+      query: data?.query || "",
+      sortBy: data?.sortBy || "views",
+      sortType: parseInt(data?.sortType) || -1,
+      mine:-1
+    },
+    withCredentials: true,
+  });
+  return result;
+});
+const getAllmineVideos = asynchandeler(async (data) => {
+  const result = await axios.get(`${apiUrl}/v1/video/getallmineVideos`, {
+    params: {
+      page: data?.page || 1,
+      limit: data?.limit || 10,
+      query: data?.query || "",
+      sortBy: data?.sortBy || "views",
+      sortType: parseInt(data?.sortType) || -1,
+      mine:1
     },
     withCredentials: true,
   });
@@ -67,5 +81,6 @@ export {
   updateVideo,
   deleteVideo,
   increseVideoViews,
-  changestatus
+  changestatus,
+  getAllmineVideos
 };

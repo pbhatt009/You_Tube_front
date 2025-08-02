@@ -1,43 +1,77 @@
-import { StrictMode, useEffect } from 'react'
+import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import './index.css'
-import { useSelector,useDispatch } from 'react-redux'
 import App from './App.jsx'
 import store from "../src/Store/store.js"
-import { Header, Footer, Sidebar, LoginPage,RegisterPage,getcurrentUser,UploadVideopage,HomePage,Myvideos,Subscripition,WatchHistory,ChannelDashboard,EditChannelPage,ChangePasswordPage,UpdateVideoPage,VideoDashboard } from './utils/index.js'
+import IsAuthenticated from './components/IsAuthenticated.jsx'
+import { Header, Footer, Sidebar, LoginPage, RegisterPage, UploadVideopage, HomePage, Myvideos, Subscripition, WatchHistory, ChannelDashboard, EditChannelPage, ChangePasswordPage, UpdateVideoPage, VideoDashboard } from './utils/index.js'
 
- 
-
-const router=createBrowserRouter(createRoutesFromElements(
-  
+const router = createBrowserRouter(createRoutesFromElements(
   <>
-  {/* protected route */}
-<Route path='/' element={<App/>}>
-<Route path='/'element={<HomePage/>}></Route>
-<Route path='/my-videos'element={<Myvideos/>}></Route>
-<Route path='uploadVideo'element={<UploadVideopage/>}></Route>
-<Route path='/subscriptions'element={<Subscripition/>}></Route>
-<Route path='/history'element={<WatchHistory/>}></Route>
-<Route path='/dashboard'element={<ChannelDashboard/>}></Route>
-<Route path='/edit-channel'element={<EditChannelPage/>}></Route>
-<Route path='/changepassword' element={<ChangePasswordPage/>}></Route>
-<Route path='/updateVideo' element={<UpdateVideoPage/>}></Route>
-<Route path='/videodashboard' element={<VideoDashboard/>}></Route>
-</Route>
-
-{/* public routes */}
-<Route path='/login'element={<LoginPage/>}></Route>
-<Route path='/register' element={<RegisterPage/>}></Route>
-
-</>
+    {/* Main App Layout */}
+    <Route path='/' element={<App />}>
+      {/* Public Routes */}
+      <Route index element={<HomePage />} />
+      <Route path='/login' element={<LoginPage />} />
+      <Route path='/register' element={<RegisterPage />} />
+      <Route path='/videodashboard' element={
+      
+          <VideoDashboard />
+       
+      } />
+      
+      {/* Protected Routes */}
+      <Route path='/my-videos' element={
+        <IsAuthenticated>
+          <Myvideos />
+        </IsAuthenticated>
+      } />
+      <Route path='/uploadVideo' element={
+        <IsAuthenticated>
+          <UploadVideopage />
+        </IsAuthenticated>
+      } />
+      <Route path='/subscriptions' element={
+        <IsAuthenticated>
+          <Subscripition />
+        </IsAuthenticated>
+      } />
+      <Route path='/history' element={
+        <IsAuthenticated>
+          <WatchHistory />
+        </IsAuthenticated>
+      } />
+      <Route path='/dashboard' element={
+        <IsAuthenticated>
+          <ChannelDashboard />
+        </IsAuthenticated>
+      } />
+      <Route path='/edit-channel' element={
+        <IsAuthenticated>
+          <EditChannelPage />
+        </IsAuthenticated>
+      } />
+      <Route path='/changepassword' element={
+        <IsAuthenticated>
+          <ChangePasswordPage />
+        </IsAuthenticated>
+      } />
+      <Route path='/updateVideo' element={
+        <IsAuthenticated>
+          <UpdateVideoPage />
+        </IsAuthenticated>
+      } />
+      
+    </Route>
+  </>
 ))
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    < Provider store={store}>
-    <RouterProvider router={router}/>
+    <Provider store={store}>
+      <RouterProvider router={router} />
     </Provider>
-
   </StrictMode>,
 )

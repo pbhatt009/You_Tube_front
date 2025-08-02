@@ -8,11 +8,16 @@ import { getchanneldetails } from "../utils/index.js"
 
 export default function RightSidebar({show ,changeshow}){
 const userdata=useSelector(state=>(state.auth.userdata))
+const isAuthenticated = useSelector((state) => state.auth.status);
 const dispatch=useDispatch()
 const[error,seterror]=useState("")
 const userdeatils=useSelector(state=>state.auth.userdata);
 const navigate=useNavigate()
 
+// Fallback values for guest users
+const userAvatar = userdata?.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face";
+const userName = userdata?.username || "Guest";
+const userFullName = userdata?.fullName || "Guest User";
 
 const navItems = [
   
@@ -45,7 +50,7 @@ const handel=async (e)=>{
   let channel={};
   console.log(e.target.id)
   if(e.target.id=="/dashboard"){
-     const result=await getchanneldetails(userdata.username)
+     const result=await getchanneldetails(userName)
         if(result.error){
           seterror(result.error.message)
           return;
@@ -65,56 +70,57 @@ const handel=async (e)=>{
 
 }
    return (
-<div hidden={!show} className="h-screen w-[70vw] lg:w-[20vw] sm:w-[40vw] md:w-[30vw] bg-black border-amber-50 text-white fixed top-0 z-200 right-0  ">
- <button onClick={changeshow}>
-<XCircleIcon className=" h-10 w-10 absolute right-5"/>
- </button>
+<div hidden={!show} className="h-screen w-[70vw] lg:w-[20vw] sm:w-[40vw] md:w-[30vw] bg-black border-amber-50 text-white fixed top-0 z-200 right-0 flex flex-col">
+ {/* Close Button */}
+ <div className="flex justify-end p-4">
+   <button onClick={changeshow} className="hover:bg-gray-800 rounded-full p-1 transition-colors duration-200">
+     <XCircleIcon className="h-8 w-8"/>
+   </button>
+ </div>
 
-<button className="flex flex-col w-full justify-center items-center absolute top-20">
-    <img src={userdata.avatar} className="h-20 w-20 rounded-full border-white shadow-amber-50" alt="no image" />
-    <span>{userdata.fullName}</span>
+ {/* User Profile Section */}
+ <div className="flex flex-col items-center px-4 py-6">
+   <img src={userAvatar} className="h-20 w-20 rounded-full border-2 border-white shadow-lg mb-3" alt={`${userName}'s Profile`} />
+   <span className="text-lg font-medium">{userFullName}</span>
+ </div>
 
-</button>
-<div className="flex flex-col justify-center items-center  gap-0 w-full absolute top-60 sm:top-50 text-white">
+ {/* Navigation Items */}
+ <div className="flex-1 flex flex-col px-4">
+   <div className="flex flex-col gap-1">
+     {navItems.map(item => (
+       <div key={item.name} className="border-t border-gray-700">
+         <button
+           id={item.to}
+           className="w-full items-center space-x-3 p-4 rounded-lg hover:bg-gray-800 flex justify-start transition-colors duration-200"
+           onClick={handel}
+         >
+           {item.icon}
+           <span id={item.to}>{item.name}</span>
+         </button>
+       </div>
+     ))}
+   </div>
+ </div>
 
- {navItems.map(item => (
-  <div key={item.name} className=" h-17  w-full border-t border-b  border-gray-400 flex justify-center ">
-    <buttton
-      id={item.to}
-      className=" items-center h-full w-full space-x-3 p-2 rounded-lg hover:bg-gray-700 flex justify-center"
-       onClick={handel}
-       
-    >
-      {item.icon}
-      <span id={item.to}>{item.name}</span>
-    </buttton>
-  </div>
-))
-        }
+ {/* Logout Section - Only show for authenticated users */}
+ {isAuthenticated && (
+   <div className="p-4 border-t border-gray-700">
+     <button
+       onClick={handleLogout}
+       className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg shadow-sm transition duration-200"
+     >
+       Log Out
+     </button>
+     
+     {/* Error Message */}
+     {error && (
+       <div className="mt-3 text-center">
+         <span className="text-red-400 text-sm">{error}</span>
+       </div>
+     )}
+   </div>
+ )}
 </div>
-
-<div className='absolute bottom-17 md:bottom-13 lg:bottom-15  xl:bottom-27 w-full flex justify-center'>
-<button
-  onClick={handleLogout}
-  className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-md shadow-sm transition duration-200 "
->
-  Log Out
-</button>
-
-
-</div>
-<div className="absolute flex w-full bottom-15 justify-center">
- {error && <span className="text-red-500 text-m relative -top-3">{error}</span>}
-</div>
-
-</div>
-
-
-
-
-
-
-
 )
 
 } 

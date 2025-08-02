@@ -17,6 +17,7 @@ import {register, loginreq, logoutreq, updaterefreshtoken, getcurrentUser, updat
 
 import {  uploadVideo,
       getAllVideos,
+      getAllmineVideos,
       getVideoById,
       updateVideo,
       deleteVideo,
@@ -44,6 +45,7 @@ export{
       getVideoById,
       updateVideo,
       deleteVideo,
+      getAllmineVideos,
       increseVideoViews,
       changestatus,
       getsubscripition,
