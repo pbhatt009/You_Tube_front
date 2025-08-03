@@ -2,6 +2,13 @@ import asynchandeler from "../utils/wraper";
 import axios from "axios";
 const apiUrl = import.meta.env.VITE_API_URL;
 
+const sendOTP = asynchandeler(async (data) => {
+   const result = await axios.post(`${apiUrl}/v1/user/sendEmail`, data, {
+    withCredentials: true,
+   });
+   return result;
+})
+
 const register = asynchandeler(async (data) => {
   const result = await axios.post(`${apiUrl}/v1/user/register`, data, {
     withCredentials: true,
@@ -107,4 +114,5 @@ export {
   updatewatchhistory,
   changePassword,
   getsubscripition,
-};
+  sendOTP
+}

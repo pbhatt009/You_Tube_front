@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { EyeIcon, EyeSlashIcon, UserIcon, EnvelopeIcon, LockClosedIcon, PhotoIcon, ArrowRightIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, EyeSlashIcon, UserIcon, EnvelopeIcon, LockClosedIcon, PhotoIcon, ArrowRightIcon, CheckCircleIcon, ClockIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { register, loginreq } from '../utils/index.js'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { login } from '../Store/Auth_reducer.jsx';
+import OTPInput from 'react-otp-input';
+import { sendOTP } from '../Requsets/User.requests.js';
 
 export default function RegisterForm() {
     const Navigate = useNavigate();
@@ -18,8 +20,13 @@ export default function RegisterForm() {
     });
     const [showpassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
-    const [registerprocessing, setRegisterProcessing] = useState(false);
-    const [registerdone, setRegisterDone] = useState(false);
+    const [currentStep, setCurrentStep] = useState('form'); // 'form', 'otp', 'processing'
+    const [otp, setOtp] = useState('');
+    const [generatedOTP, setGeneratedOTP] = useState('');
+    const [otpSent, setOtpSent] = useState(false);
+    const [otpTimer, setOtpTimer] = useState(0);
+    const [processing, setProcessing] = useState(false);
+    const [success, setSuccess] = useState(false);
     const dispatch = useDispatch();
 
     const handleChange = (e) => {
@@ -40,68 +47,324 @@ export default function RegisterForm() {
         }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setRegisterProcessing(true);
-        setRegisterDone(false);
-        setErrors({});
-
-        // Validation
+    const validateForm = () => {
+        const newErrors = {};
+        
+        // Email validation
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!emailRegex.test(formData.email)) {
-            setErrors(prev => ({ ...prev, email: 'Invalid email format' }));
-            setRegisterProcessing(false);
-            return;
+            newErrors.email = 'Invalid email format';
         }
+        
+        // Password validation
         if (formData.password.length < 6) {
-            setErrors(prev => ({ ...prev, password: 'Password must be at least 6 characters' }));
-            setRegisterProcessing(false);
-            return;
+            newErrors.password = 'Password must be at least 6 characters';
         }
-        if (formData.avatar?.type.split('/')[0] !== 'image') {
-            setErrors(prev => ({ ...prev, avatar: 'Avatar should be an image' }));
-            setRegisterProcessing(false);
-            return;
+        
+        // Required fields
+        if (!formData.fullName.trim()) {
+            newErrors.fullName = 'Full name is required';
         }
-        if (formData.coverImage && formData.coverImage?.type.split('/')[0] !== 'image') {
-            setErrors(prev => ({ ...prev, coverImage: 'Cover image should be an image' }));
-            setRegisterProcessing(false);
-            return;
+        if (!formData.username.trim()) {
+            newErrors.username = 'Username is required';
         }
-
-        const fdata = new FormData();
-        for (const key in formData) {
-            if (formData[key] !== null && formData[key] !== undefined) {
-                fdata.append(key, formData[key]);
-            }
+        if (!formData.avatar) {
+            newErrors.avatar = 'Profile picture is required';
         }
-
-        const result = await register(fdata);
-        if (result.error) {
-            setErrors(prev => ({ ...prev, general: result.error.message }));
-            setRegisterProcessing(false);
-            return;
+        
+        // File type validation
+        if (formData.avatar && formData.avatar.type.split('/')[0] !== 'image') {
+            newErrors.avatar = 'Avatar should be an image';
+        }
+        if (formData.coverImage && formData.coverImage.type.split('/')[0] !== 'image') {
+            newErrors.coverImage = 'Cover image should be an image';
         }
 
-        setRegisterDone(true);
-
-        const loginData = await loginreq({
-            "username": fdata.get('username'),
-            "password": fdata.get('password')
-        });
-
-        if (loginData.error) {
-            setErrors(prev => ({ ...prev, general: loginData.error.message }));
-            setRegisterProcessing(false);
-            setRegisterDone(false);
-            return;
-        }
-
-        dispatch(login(loginData.data.data));
-        setRegisterProcessing(false);
-        setRegisterDone(false);
-        Navigate('/', { replace: true });
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
+
+    // Generate a random 6-digit OTP
+    const generateOTP = () => {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+    };
+
+    const handleSendOTP = async () => {
+        if (!validateForm()) {
+            return;
+        }
+
+        setProcessing(true);
+        setErrors({});
+
+        try {
+           
+            
+            // Generate OTP
+            const newOTP = generateOTP();
+            setGeneratedOTP(newOTP);
+            const res=await sendOTP({email:formData.email,otp:newOTP,username:formData.username})
+            if(res.error){
+                setErrors({general:res.error.message})
+                setProcessing(false)
+                return
+            }
+            
+            console.log('📧 OTP sent to', formData.email);
+            
+            setOtpSent(true);
+            setCurrentStep('otp');
+            setOtpTimer(60); // 60 seconds countdown
+            setProcessing(false);
+        } catch (error) {
+            setErrors({ general: 'Failed to send OTP. Please try again.' });
+            setProcessing(false);
+        }
+    };
+
+    const handleResendOTP = async () => {
+        if (otpTimer > 0) return;
+
+        setProcessing(true);
+        setErrors({});
+
+        try {
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Generate new OTP
+            const newOTP = generateOTP();
+            setGeneratedOTP(newOTP);
+            const res=await sendOTP({email:formData.email,otp:newOTP,username:formData.username})
+            if(res.error){
+                setErrors({general:res.error.message})
+                setProcessing(false)
+                return
+            }
+            
+            
+            setOtpTimer(60);
+            setProcessing(false);
+        } catch (error) {
+            setErrors({ general: 'Failed to resend OTP. Please try again.' });
+            setProcessing(false);
+        }
+    };
+
+    const handleVerifyOTP = async () => {
+        if (otp.length !== 6) {
+            setErrors({ otp: 'Please enter a 6-digit OTP' });
+            return;
+        }
+
+        setProcessing(true);
+        setErrors({});
+
+        
+            
+            // Verify OTP
+            if (otp === generatedOTP) {
+                handleRegistration()
+            } else {
+                setErrors({ otp: 'Invalid OTP. Please check and try again.' });
+                setProcessing(false);
+            }
+        
+    };
+
+    const handleRegistration = async () => {
+        setCurrentStep('processing');
+        setProcessing(true);
+        setErrors({});
+
+        try {
+            const fdata = new FormData();
+            for (const key in formData) {
+                if (formData[key] !== null && formData[key] !== undefined) {
+                    fdata.append(key, formData[key]);
+                }
+            }
+            // console.log(fdata)
+            const result = await register(fdata);
+            console.log(result)
+            if (result.error) {
+                setErrors({ general: result.error.message });
+                setProcessing(false);
+                setCurrentStep('otp');
+                return;
+            }
+
+            setSuccess(true);
+
+            // Auto login after successful registration
+            // console.log("login")
+            const logininfo={
+                emailorusername:formData.username,
+                password:formData.password
+            }
+            console.log(logininfo)
+            const loginData = await loginreq(logininfo);
+
+            if (loginData.error) {
+                setErrors({ general: loginData.error.message });
+                setProcessing(false);
+                setCurrentStep('otp');
+                setSuccess(false);
+                return;
+            }
+
+            dispatch(login(loginData.data.data));
+            setProcessing(false);
+            Navigate('/', { replace: true });
+        } catch (error) {
+            setErrors({ general: 'Registration failed. Please try again.' });
+            setProcessing(false);
+            setCurrentStep('otp');
+            setSuccess(false);
+        }
+    };
+
+    // Timer countdown effect
+    React.useEffect(() => {
+        let interval;
+        if (otpTimer > 0) {
+            interval = setInterval(() => {
+                setOtpTimer(prev => prev - 1);
+            }, 1000);
+        }
+        return () => clearInterval(interval);
+    }, [otpTimer]);
+
+    const goBackToForm = () => {
+        setCurrentStep('form');
+        setOtp('');
+        setGeneratedOTP('');
+        setOtpSent(false);
+        setOtpTimer(0);
+        setErrors({});
+    };
+
+    if (currentStep === 'otp') {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
+                <div className="w-full max-w-md">
+                    {/* Header */}
+                    <div className="text-center mb-8">
+                        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-full mb-4 shadow-lg">
+                            <EnvelopeIcon className="h-8 w-8 text-white" />
+                        </div>
+                        <h1 className="text-3xl font-bold text-white mb-2">Verify Email</h1>
+                        <p className="text-gray-400">Enter the 6-digit code sent to</p>
+                        <p className="text-red-400 font-medium">{formData.email}</p>
+                        
+                     
+                    </div>
+
+                    {/* OTP Form */}
+                    <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-8">
+                        <div className="space-y-6">
+                            {/* OTP Input */}
+                            <div className="space-y-4">
+                                <label className="text-sm font-medium text-gray-300">Enter OTP</label>
+                                <OTPInput
+                                    value={otp}
+                                    onChange={setOtp}
+                                    numInputs={6}
+                                    renderSeparator={<span className="mx-2 text-white">-</span>}
+                                    renderInput={(props) => (
+                                        <input
+                                            {...props}
+                                            className="w-12 h-12 text-center text-lg font-semibold bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all duration-200"
+                                        />
+                                    )}
+                                />
+                                {errors.otp && <p className="text-red-400 text-sm text-center">{errors.otp}</p>}
+                            </div>
+
+                            {/* Timer and Resend */}
+                            <div className="text-center">
+                                {otpTimer > 0 ? (
+                                    <p className="text-gray-400 text-sm flex items-center justify-center gap-2">
+                                        <ClockIcon className="h-4 w-4" />
+                                        Resend OTP in {otpTimer}s
+                                    </p>
+                                ) : (
+                                    <button
+                                        onClick={handleResendOTP}
+                                        disabled={processing}
+                                        className="text-red-400 hover:text-red-300 font-medium transition-colors duration-200 disabled:opacity-50"
+                                    >
+                                        Resend OTP
+                                    </button>
+                                )}
+                            </div>
+
+                            {/* Error Message */}
+                            {errors.general && (
+                                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
+                                    <p className="text-red-400 text-sm text-center">{errors.general}</p>
+                                </div>
+                            )}
+
+                            {/* Action Buttons */}
+                            <div className="space-y-3">
+                                <button
+                                    onClick={handleVerifyOTP}
+                                    disabled={processing || otp.length !== 6}
+                                    className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:transform-none disabled:shadow-none"
+                                >
+                                    {processing ? (
+                                        <>
+                                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                            Verifying...
+                                        </>
+                                    ) : (
+                                        <>
+                                            Verify OTP
+                                            <ArrowRightIcon className="h-5 w-5" />
+                                        </>
+                                    )}
+                                </button>
+
+                                <button
+                                    onClick={goBackToForm}
+                                    disabled={processing}
+                                    className="w-full bg-white/10 hover:bg-white/20 text-white font-medium py-3 px-4 rounded-xl transition-all duration-200 border border-white/20 flex items-center justify-center gap-2"
+                                >
+                                    <XCircleIcon className="h-5 w-5" />
+                                    Back to Form
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="text-center mt-8">
+                        <p className="text-gray-500 text-sm">
+                            © 2024 YouTube Clone. All rights reserved.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (currentStep === 'processing' && success) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
+                <div className="w-full max-w-md text-center">
+                    <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-8">
+                        <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500 rounded-full mb-4">
+                            <CheckCircleIcon className="h-8 w-8 text-white" />
+                        </div>
+                        <h1 className="text-2xl font-bold text-white mb-2">Account Created!</h1>
+                        <p className="text-gray-400 mb-6">Your account has been successfully created and you're being signed in...</p>
+                        <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin mx-auto"></div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
@@ -117,7 +380,7 @@ export default function RegisterForm() {
 
                 {/* Register Form */}
                 <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-8">
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={(e) => { e.preventDefault(); handleSendOTP(); }} className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Full Name */}
                             <div className="space-y-2">
@@ -240,29 +503,23 @@ export default function RegisterForm() {
                         )}
 
                         {/* Submit Button */}
-                        {!registerprocessing ? (
-                            <button
-                                type="submit"
-                                className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
-                            >
-                                Create Account
-                                <ArrowRightIcon className="h-5 w-5" />
-                            </button>
-                        ) : !registerdone ? (
-                            <button
-                                type="button"
-                                disabled
-                                className="w-full bg-gray-600 text-white font-semibold py-3 px-4 rounded-xl opacity-50 cursor-not-allowed flex items-center justify-center gap-2"
-                            >
-                                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                Creating Account...
-                            </button>
-                        ) : (
-                            <div className="w-full bg-green-500/10 border border-green-500/20 rounded-lg p-3 flex items-center justify-center gap-2">
-                                <CheckCircleIcon className="h-5 w-5 text-green-400" />
-                                <span className="text-green-400 text-sm">Account Created! Signing you in...</span>
-                            </div>
-                        )}
+                        <button
+                            type="submit"
+                            disabled={processing}
+                            className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:transform-none disabled:shadow-none"
+                        >
+                            {processing ? (
+                                <>
+                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                    Sending OTP...
+                                </>
+                            ) : (
+                                <>
+                                    Send OTP
+                                    <ArrowRightIcon className="h-5 w-5" />
+                                </>
+                            )}
+                        </button>
 
                         {/* Login Link */}
                         <div className="text-center pt-4 border-t border-white/10">
