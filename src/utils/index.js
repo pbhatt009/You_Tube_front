@@ -13,7 +13,8 @@ import ChannelDashboard from "../Pages/Channel_Dashboard.jsx";
 import EditChannelPage from "../Pages/Edit_channel.jsx";
 import ChangePasswordPage from "../Pages/ChangePassword.jsx";
 import UpdateVideoPage from "../Pages/update _Video.jsx";
-import {register, loginreq, logoutreq, updaterefreshtoken, getcurrentUser, updateuser,getsubscripition, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword} from "../Requsets/User.requests.js"
+import ResetPassword from "../Pages/Reset_password.jsx";
+import {register,forgotpassword,sendresetpassword, loginreq, logoutreq, updaterefreshtoken, getcurrentUser, updateuser,getsubscripition, updatecoverimage, getchanneldetails, getwatchhistory, updateavatar, updatewatchhistory,changePassword} from "../Requsets/User.requests.js"
 
 import {  uploadVideo,
       getAllVideos,
@@ -57,6 +58,9 @@ export{
     UpdateVideoPage,
     addComment, updateComment, deleteComment, getAllComments,
     addliketoVideo,addliketocomment,unlikevideo,unlikecomment,
-    VideoDashboard
+    VideoDashboard,
+    ResetPassword,
+    sendresetpassword,
+    forgotpassword
 
 }

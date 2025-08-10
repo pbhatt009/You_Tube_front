@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { EyeIcon, EyeSlashIcon, UserIcon, LockClosedIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
-import { loginreq } from '../utils/index.js';
+import { loginreq,sendresetpassword } from '../utils/index.js';
 import { useDispatch } from 'react-redux';
 import { login } from '../Store/Auth_reducer.jsx';
 
@@ -14,13 +14,17 @@ const LoginPage = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
+    // Forgot Password state
+    const [forgotEmail, setForgotEmail] = useState('');
+    const [showForgot, setShowForgot] = useState(false);
+    const [forgotMessage, setForgotMessage] = useState('');
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
             [name]: value,
         }));
-        // Clear error when user starts typing
         if (error) setError('');
     };
 
@@ -37,6 +41,17 @@ const LoginPage = () => {
             setError(logindata.error.message || 'Login failed. Please try again.');
         }
         setLoading(false);
+    };
+
+    // Forgot password function (blank for you to implement API)
+    const handleForgotPassword = async (e) => {
+        e.preventDefault();
+        const result=await sendresetpassword({email:forgotEmail});
+        if(result.error){
+            setForgotMessage(result.error.message);
+            return;
+        }
+        setForgotMessage(' A reset link has been sent.');
     };
 
     return (
@@ -73,7 +88,16 @@ const LoginPage = () => {
 
                         {/* Password Field */}
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-300">Password</label>
+                            <div className="flex justify-between items-center">
+                                <label className="text-sm font-medium text-gray-300">Password</label>
+                                <button
+                                    type="button"
+                                    onClick={() => setShowForgot(true)}
+                                    className="text-xs text-red-400 hover:text-red-300"
+                                >
+                                    Forgot Password?
+                                </button>
+                            </div>
                             <div className="relative">
                                 <input
                                     required={true}
@@ -143,6 +167,41 @@ const LoginPage = () => {
                     </p>
                 </div>
             </div>
+
+            {/* Forgot Password Modal */}
+            {showForgot && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-xl w-full max-w-sm shadow-xl">
+                        <h2 className="text-xl font-semibold mb-4">Reset Password</h2>
+                        <form onSubmit={handleForgotPassword} className="space-y-4">
+                            <input
+                                type="email"
+                                placeholder="Enter your registered email"
+                                value={forgotEmail}
+                                onChange={(e) => setForgotEmail(e.target.value)}
+                                required
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                            />
+                            {forgotMessage && <p className="text-green-600 text-sm">{forgotMessage}</p>}
+                            <div className="flex justify-end gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowForgot(false)}
+                                    className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                                >
+                                    Send Link
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

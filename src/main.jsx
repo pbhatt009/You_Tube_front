@@ -6,7 +6,7 @@ import './index.css'
 import App from './App.jsx'
 import store from "../src/Store/store.js"
 import IsAuthenticated from './components/IsAuthenticated.jsx'
-import { Header, Footer, Sidebar, LoginPage, RegisterPage, UploadVideopage, HomePage, Myvideos, Subscripition, WatchHistory, ChannelDashboard, EditChannelPage, ChangePasswordPage, UpdateVideoPage, VideoDashboard } from './utils/index.js'
+import {ResetPassword, Header, Footer, Sidebar, LoginPage, RegisterPage, UploadVideopage, HomePage, Myvideos, Subscripition, WatchHistory, ChannelDashboard, EditChannelPage, ChangePasswordPage, UpdateVideoPage, VideoDashboard } from './utils/index.js'
 
 const router = createBrowserRouter(createRoutesFromElements(
   <>
@@ -16,6 +16,7 @@ const router = createBrowserRouter(createRoutesFromElements(
       <Route index element={<HomePage />} />
       <Route path='/login' element={<LoginPage />} />
       <Route path='/register' element={<RegisterPage />} />
+     
       <Route path='/videodashboard' element={
       
           <VideoDashboard />
@@ -65,6 +66,8 @@ const router = createBrowserRouter(createRoutesFromElements(
       } />
       
     </Route>
+    <Route path='/resetpassword' element={<ResetPassword />} />
+
   </>
 ))
 

@@ -9,6 +9,24 @@ const sendOTP = asynchandeler(async (data) => {
    return result;
 })
 
+const sendresetpassword=asynchandeler(async(data)=>{
+  const result = await axios.post(`${apiUrl}/v1/user/resetPasswordmail`, data, {
+    withCredentials: true,
+   });
+   return result;
+
+
+})
+
+const forgotpassword=asynchandeler(async(data)=>{
+  const result = await axios.post(`${apiUrl}/v1/user/forgotPassword`, data, {
+    withCredentials: true,
+   });
+   return result;
+
+
+})
+
 const register = asynchandeler(async (data) => {
   const result = await axios.post(`${apiUrl}/v1/user/register`, data, {
     withCredentials: true,
@@ -114,5 +132,7 @@ export {
   updatewatchhistory,
   changePassword,
   getsubscripition,
-  sendOTP
+  sendOTP,
+  sendresetpassword,
+  forgotpassword
 }
