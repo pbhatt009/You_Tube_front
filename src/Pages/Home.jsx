@@ -112,7 +112,7 @@ const channelpagechange=()=>{
  <div className="w-full bg-white/80 backdrop-blur-xl border-b border-gray-200/50 shadow-sm sticky top-0 z-40">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Navigation Tabs */}
-      <div className="flex items-center justify-between py-4">
+      <div className="flex sticky items-center justify-between py-4">
         {/* Filter Button */}
         <button 
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-300 shadow-sm border ${

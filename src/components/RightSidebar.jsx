@@ -8,14 +8,14 @@ import { getchanneldetails } from "../utils/index.js"
 
 export default function RightSidebar({show ,changeshow}){
 const userdata=useSelector(state=>(state.auth.userdata))
-const isAuthenticated = useSelector((state) => state.auth.status);
+let isAuthenticated = useSelector((state) => state.auth.status);
 const dispatch=useDispatch()
 const[error,seterror]=useState("")
 const userdeatils=useSelector(state=>state.auth.userdata);
 const navigate=useNavigate()
 
 // Fallback values for guest users
-const userAvatar = userdata?.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face";
+const userAvatar = userdata?.avatar;
 const userName = userdata?.username || "Guest";
 const userFullName = userdata?.fullName || "Guest User";
 
@@ -39,6 +39,8 @@ const handleLogout=async (e)=>{
    }
       console.log('hh')
     dispatch(logout())
+    isAuthenticated=false
+    changeshow()
     navigate('/login', { replace: true });
    
    

@@ -19,6 +19,7 @@ export default function Header() {
   const[showsearch,setsearch]=useState(false);
   const[showrightsidebar,setrightsidebar]=useState(false)
   const sidebarRef = useRef(null);
+
   
   // Click outside to close right sidebar
   useEffect(() => {
@@ -112,7 +113,7 @@ export default function Header() {
             {/* Authenticated User Avatar - Show on all screen sizes */}
             {isAuthenticated && (
               <button onClick={rsbarfn} className='hover:scale-105 transition-transform duration-200'>
-                <img src={userAvatar} alt={`${userName}'s Profile`} className='h-10 w-10 rounded-full border-2 border-gray-600 hover:border-red-500 transition-colors duration-200' />
+                <img src={userAvatar} alt={`${userName}'s Profile`} className='hidden sm:block h-10 w-10 rounded-full border-2 border-gray-600 hover:border-red-500 transition-colors duration-200' />
               </button>
             )}
 

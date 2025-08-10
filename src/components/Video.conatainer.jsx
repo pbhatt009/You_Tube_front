@@ -81,7 +81,7 @@ setsucesss(re.data.message)
 
 }
 return(
-<div className="box-border relative flex flex-col w-full max-w-[320px] sm:max-w-[360px] md:max-w-[400px] lg:max-w-[420px] rounded-xl bg-white hover:bg-gray-50 overflow-hidden transition-all duration-200 cursor-pointer group"
+<div className="box-border relative flex flex-col w-full max-w-[330px] sm:max-w-[360px] md:max-w-[400px] lg:max-w-[420px] rounded-xl bg-gray-100 hover:bg-gray-200 overflow-hidden transition-all duration-200 cursor-pointer group"
 onClick={parentclick}>
   <div className="relative overflow-hidden rounded-xl">
     <img
